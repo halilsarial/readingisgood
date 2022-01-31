@@ -1,4 +1,4 @@
-# food-store
+# ReadingIsGood book-store BackEnd Application
 Getir ReadingIsGood Book Store Microservices Project
 
 This project is produced by 5 microservices project. 
