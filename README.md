@@ -19,7 +19,9 @@ Service Discovery service runs for naming server. Other microservices are client
 
 Api Gateway service runs for managing microservices from one point. General loggging processes and service authentication processes is done in this service. This service also puts user id information to request header. Thus other microservices can be used user information and they can complete domain information with user information. In this microservice, spring cloud gateway library was used.
 
-In this project mongo db is used as a database.
+In this project mongo db is used as a database. It can be run up with docker compose.
+
+Log4j was used for loggig processes in the project.
 
 Swagger 3 was used in the project. Service informations can be seen from swagger home paths.
 
