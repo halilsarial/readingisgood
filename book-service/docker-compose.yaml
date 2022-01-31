@@ -1,0 +1,84 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=devroot
+      - MONGO_INITDB_ROOT_PASSWORD=devroot
+  mongo-express:
+    image: mongo-express
+    restart: always
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=devroot
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=devroot
+    depends_on:
+      - mongo
+    ports:
+      - "8081:8081"
+  discovery-server-service:
+    image: discovery-server-service
+    ports:
+      - "8761:8761"
+    restart: always
+
+  book-service:
+    image: book-service
+    ports:
+      - "8085:8085"
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery-server-service:8761/eureka
+    restart: always
+    depends_on:
+      - discovery-server-service
+      - mongo
+    links:
+      - discovery-server-service
+      - mongo
+
+  order-service:
+    image: order-service
+    ports:
+      - "8086:8086"
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery-server-service:8761/eureka
+    restart: always
+    depends_on:
+      - discovery-server-service
+      - mongo
+    links:
+      - discovery-server-service
+      - mongo
+
+  user-service:
+    image: user-service
+    ports:
+      - "8084:8084"
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery-server-service:8761/eureka
+      - spring.data.mongodb.host=mongo
+    restart: always
+    depends_on:
+      - discovery-server-service
+      - mongo
+    links:
+      - discovery-server-service
+      - mongo
+
+  api-gateway-service:
+    image: api-gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://discovery-server-service:8761/eureka
+    restart: always
+    depends_on:
+      - discovery-server-service
+      - mongo
+    links:
+      - discovery-server-service
+      - mongo
